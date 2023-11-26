@@ -26,7 +26,7 @@ export function isPasswordLengthEnough(password) {
 };
 
 export function getProjectName() {
-    return 'SkillUp';
+    return 'Skill Share';
 }
 
 

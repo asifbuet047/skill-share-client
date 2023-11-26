@@ -6,11 +6,13 @@ import TeachButton from '../TeachButton/TeachButton'
 import SigninRegistrationButton from '../SigninRegistrationButton/SigninRegistrationButton'
 import { Divider } from '@mui/material'
 
+
 function NavigationBar() {
     return (
         <div className='flex flex-col md:flex-row justify-between border-2 rounded-lg'>
             <div className=''>
                 <Branding></Branding>
+                
             </div>
             <div className='flex flex-col justify-center items-center md:flex-row'>
                 <HomeButton></HomeButton>
