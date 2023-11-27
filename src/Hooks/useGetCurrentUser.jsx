@@ -3,7 +3,7 @@ import { AuthenticationContext } from '../Contexts/AuthenticationContextProvider
 import useAxiosSecure from './useAxiosSecure';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-function useGetCurrentUserHook() {
+function useGetCurrentUser() {
     const { user } = useContext(AuthenticationContext);
     const queryClient = useQueryClient();
     const data = useQuery({
@@ -18,4 +18,4 @@ function useGetCurrentUserHook() {
     return data;
 }
 
-export default useGetCurrentUserHook
+export default useGetCurrentUser

@@ -5,7 +5,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import SchoolIcon from '@mui/icons-material/School';
 import PersonIcon from '@mui/icons-material/Person';
 import { NavLink, Outlet } from 'react-router-dom';
-import useGetCurrentUserHook from '../../Hooks/useGetCurrentUserHook';
+import useGetCurrentUser from '../../Hooks/useGetCurrentUser';
 import NavigationBar from '../NavigationBar/NavigationBar';
 import { Button } from '@mui/material';
 import { GiTeacher } from "react-icons/gi";
@@ -14,8 +14,7 @@ import ClockLoading from '../DataLoadingComponents/ClockLoading';
 
 
 function Dashboard() {
-    const data = useGetCurrentUserHook();
-    console.log(data);
+    const data = useGetCurrentUser();
     return (
         <div>
             <NavigationBar></NavigationBar>
