@@ -22,7 +22,9 @@ function SigninRegistrationButton() {
                                 }
                             </Dropdown.Header>
                             <Dropdown.Divider />
-                            <Dropdown.Item>Dashboard</Dropdown.Item>
+                            <NavLink to={'/dashboard'}>
+                                <Dropdown.Item>Dashboard</Dropdown.Item>
+                            </NavLink>
                             <Dropdown.Item onClick={handleLogout}>Log Out</Dropdown.Item>
                         </Dropdown>
                     </>

@@ -3,6 +3,9 @@ import App from "../App";
 import HomePage from "../Components/Home/HomePage";
 import SignInPage from "../Components/Signin/SignInPage";
 import RegistrationPage from "../Components/Registration/RegistrationPage";
+import Dashboard from "../Components/Dashboard/Dashboard";
+import AddClassPage from "../Components/Dashboard/Teacher/AddClassPage/AddClassPage"
+import TeachersClassRequestPage from "../Components/Dashboard/Admin/TeachersClassRequestPage/TeachersClassRequestPage";
 
 export const getRoutes = createBrowserRouter([
     {
@@ -14,12 +17,23 @@ export const getRoutes = createBrowserRouter([
                 element: <HomePage></HomePage>
             },
             {
-                path: '/signin',
+                path: 'signin',
                 element: <SignInPage></SignInPage>
             },
             {
-                path: '/registration',
+                path: 'registration',
                 element: <RegistrationPage></RegistrationPage>
+            }
+
+        ]
+    },
+    {
+        path: '/dashboard',
+        element: <Dashboard></Dashboard>,
+        children: [
+            {
+                path: 'request',
+                element: <TeachersClassRequestPage></TeachersClassRequestPage>
             }
         ]
     }
