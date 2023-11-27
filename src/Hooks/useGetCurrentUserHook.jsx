@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 function useGetCurrentUserHook() {
     const { user } = useContext(AuthenticationContext);
     const queryClient = useQueryClient();
-    const { data, isSuccess, isError, error } = useQuery({
+    const data = useQuery({
         queryKey: ['users', user],
         queryFn: async () => {
             const axiosSecureInstance = useAxiosSecure();
@@ -15,12 +15,7 @@ function useGetCurrentUserHook() {
         }
     });
 
-    if (error) {
-        return "Fetch error";
-    }
-    if (isSuccess) {
-        return data;
-    }
+    return data;
 }
 
 export default useGetCurrentUserHook

@@ -1,14 +1,16 @@
 import { Button } from '@mui/material'
 import React, { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider'
 import { Dropdown } from 'flowbite-react';
 
 function SigninRegistrationButton() {
     const { user, signOutUser } = useContext(AuthenticationContext);
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         signOutUser();
+        navigate('/');
     }
     return (
         <div className='p-2'>
