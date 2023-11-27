@@ -25,7 +25,7 @@ function SignInPage() {
       .then((user) => {
         const mail = user.user.email;
         const uid = user.user.uid;
-        console.log(mail, uid);
+        console.log(user);
         axiosSecureInstance.post('/api/v1/token', { mail, uid })
           .then((response) => {
             console.log(response);
