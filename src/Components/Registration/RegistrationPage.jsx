@@ -2,27 +2,37 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FcGoogle } from 'react-icons/fc'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { isCapitalLetterPresentInPassword, isPasswordLengthEnough, isSpecialCharacterPresentInPassword } from '../../Utilities/Utilities'
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { useForm } from 'react-hook-form';
-
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function RegistrationPage() {
     const { createNewUser, signInWithGoogleAccount, changeExitingUsersNameAndPhotoURL, signOutUser } = useContext(AuthenticationContext);
     const navigate = useNavigate();
     const location = useLocation();
+    const [role, setRole] = useState('Student');
     const { handleSubmit, register, getValues, formState: { errors } } = useForm();
     const axiosSecureHook = useAxiosSecure();
+
+
+    const handleRoleChange = (event) => {
+        setRole(event.target.value);
+    }
 
     const handleGoogleSignIn = (event) => {
         signInWithGoogleAccount()
             .then((response) => {
-                const user = response.user.uid;
+                const uid = response.user.uid;
                 const mail = response.user.email;
-                axiosSecureHook.post('/api/v1/token', { mail, user })
+                axiosSecureHook.post('/api/v1/token', { mail, uid })
                     .then((response) => {
                         toast.success(`Successfully Logged In. Welcome ${mail}`, {
                             position: 'bottom-center',
@@ -57,19 +67,33 @@ function RegistrationPage() {
         const mail = getValues('email');
         const name = getValues('name');
         const photolink = getValues('photolink');
-       
+
         createNewUser(mail, password)
             .then((response) => {
-                const id = response.user.uid;
-                axiosSecureHook.post('/api/v1/token', { mail, id })
+                const uid = response.user.uid;
+                axiosSecureHook.post('/api/v1/token', { mail, uid })
                     .then((response) => {
                         console.log(response);
+                        localStorage.setItem('ACCESS_TOKEN', response.ACCESS_TOKEN)
                         changeExitingUsersNameAndPhotoURL(name, photolink)
                             .then((response) => {
-                                toast.success(`New user is successfully created. Welcome`, {
-                                    position: 'bottom-right',
-                                    autoClose: 2000,
-                                });
+                                const user = {
+                                    name: name,
+                                    role: role,
+                                    photo_url: photolink,
+                                    email: mail
+                                };
+                                axiosSecureHook.post('/user', user)
+                                    .then((response) => {
+                                        console.log(response);
+                                        toast.success(`New user is successfully created. Welcome`, {
+                                            position: 'bottom-right',
+                                            autoClose: 2000,
+                                        });
+                                    }).catch((error) => {
+                                        console.log(error);
+                                    })
+
                             }).catch((error) => {
                                 console.log(error);
                             });
@@ -146,6 +170,24 @@ function RegistrationPage() {
                             {
                                 errors.photolink?.type === 'pattern' && <span className='text-red-600'>Please input valid url</span>
                             }
+                        </div>
+                        <div>
+                            <Box sx={{ minWidth: 120, marginTop: 3 }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-helper-label">Role</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-helper-label"
+                                        value={role}
+                                        label="Roles"
+                                        onChange={handleRoleChange}
+
+                                    >
+                                        <MenuItem value={'Teacher'}>Teacher</MenuItem>
+                                        <MenuItem value={'Student'}>Student</MenuItem>
+
+                                    </Select>
+                                </FormControl>
+                            </Box>
                         </div>
                         <div className='flex flex-col justify-center items-center p-4'>
                             <h1 className='text-white font-semibold pb-4'>Sign in by Google instead?</h1>
