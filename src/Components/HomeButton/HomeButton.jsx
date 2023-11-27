@@ -1,11 +1,15 @@
+import { Tooltip } from '@mui/material'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 function HomeButton() {
     return (
-        <div className='p-2'>
-            <NavLink to='/'><span className=''>Home</span></NavLink>
-        </div>
+        <Tooltip title='Home'>
+            <div className='p-2'>
+                <NavLink to='/'><span className=''>Home</span></NavLink>
+            </div>
+        </Tooltip>
+
     )
 }
 

@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom"
 import NavigationBar from "./Components/NavigationBar/NavigationBar"
 
 function App() {
@@ -5,6 +6,7 @@ function App() {
   return (
     <div>
       <NavigationBar></NavigationBar>
+      <Outlet></Outlet>
     </div>
   )
 }
