@@ -14,7 +14,7 @@ function RegistrationPage() {
     const { createNewUser, signInWithGoogleAccount, changeExitingUsersNameAndPhotoURL, signOutUser } = useContext(AuthenticationContext);
     const navigate = useNavigate();
     const location = useLocation();
-    const { handleSubmit, register, getValues } = useForm();
+    const { handleSubmit, register, getValues, formState: { errors } } = useForm();
     const axiosSecureHook = useAxiosSecure();
 
     const handleGoogleSignIn = (event) => {
@@ -57,90 +57,50 @@ function RegistrationPage() {
         const mail = getValues('email');
         const name = getValues('name');
         const photolink = getValues('photolink');
-        console.log(name, photolink, mail, password);
+       
+        createNewUser(mail, password)
+            .then((response) => {
+                const id = response.user.uid;
+                axiosSecureHook.post('/api/v1/token', { mail, id })
+                    .then((response) => {
+                        console.log(response);
+                        changeExitingUsersNameAndPhotoURL(name, photolink)
+                            .then((response) => {
+                                toast.success(`New user is successfully created. Welcome`, {
+                                    position: 'bottom-right',
+                                    autoClose: 2000,
+                                });
+                            }).catch((error) => {
+                                console.log(error);
+                            });
+                    }).catch((error) => {
+                        signOutUser();
+                        console.log(error);
+                        toast.error(`Not valid User try later ${error}`, {
+                            position: 'bottom-right',
+                            autoClose: 3000,
+                        });
+                    })
 
-        // if (isSpecialCharacterPresentInPassword(password)) {
-        //     if (isCapitalLetterPresentInPassword(password)) {
-        //         if (isPasswordLengthEnough(password)) {
-        //             createNewUser(mail, password)
-        //                 .then((response) => {
-        //                     const id = response.user.uid;
-        //                     axiosSecureHook.post('/api/v1/token', { mail, id })
-        //                         .then((response) => {
-        //                             console.log(response);
-        //                             changeExitingUsersNameAndPhotoURL(name, photolink)
-        //                                 .then((response) => {
-        //                                     toast.success(`New user is successfully created. Welcome`, {
-        //                                         position: 'bottom-right',
-        //                                         autoClose: 2000,
-        //                                     });
-        //                                 }).catch((error) => {
-        //                                     console.log(error);
-        //                                 });
-        //                         }).catch((error) => {
-        //                             signOutUser();
-        //                             console.log(error);
-        //                             toast.error(`Not valid User try later ${error}`, {
-        //                                 position: 'bottom-right',
-        //                                 autoClose: 3000,
-        //                             });
-        //                         })
-
-        //                     if (location.state === null) {
-        //                         navigate('/');
-        //                     } else {
-        //                         console.log(location.state);
-        //                         navigate(`${location.state}`);
-        //                     }
-        //                 })
-        //                 .catch((error) => {
-        //                     toast.error(error.message, {
-        //                         position: 'bottom-right',
-        //                         autoClose: '2000',
-        //                         hideProgressBar: false,
-        //                         newestOnTop: true,
-        //                         closeOnClick: true,
-        //                         draggable: false,
-        //                         pauseOnHover: false,
-        //                         theme: 'light'
-        //                     });
-        //                 })
-        //         } else {
-        //             toast.error('Password length should be at least 6 character', {
-        //                 position: 'bottom-right',
-        //                 autoClose: '2000',
-        //                 hideProgressBar: false,
-        //                 newestOnTop: true,
-        //                 closeOnClick: true,
-        //                 draggable: false,
-        //                 pauseOnHover: false,
-        //                 theme: 'light'
-        //             });
-        //         }
-        //     } else {
-        //         toast.error('Password should contain at least 1 capital character', {
-        //             position: 'bottom-right',
-        //             autoClose: '2000',
-        //             hideProgressBar: false,
-        //             newestOnTop: true,
-        //             closeOnClick: true,
-        //             draggable: false,
-        //             pauseOnHover: false,
-        //             theme: 'light'
-        //         });
-        //     }
-        // } else {
-        //     toast.error('Password should contain at least 1 special character', {
-        //         position: 'bottom-right',
-        //         autoClose: '2000',
-        //         hideProgressBar: false,
-        //         newestOnTop: true,
-        //         closeOnClick: true,
-        //         draggable: false,
-        //         pauseOnHover: false,
-        //         theme: 'light'
-        //     });
-        // }
+                if (location.state === null) {
+                    navigate('/');
+                } else {
+                    console.log(location.state);
+                    navigate(`${location.state}`);
+                }
+            })
+            .catch((error) => {
+                toast.error(error.message, {
+                    position: 'bottom-right',
+                    autoClose: '2000',
+                    hideProgressBar: false,
+                    newestOnTop: true,
+                    closeOnClick: true,
+                    draggable: false,
+                    pauseOnHover: false,
+                    theme: 'light'
+                });
+            })
     };
 
     return (
@@ -155,13 +115,22 @@ function RegistrationPage() {
                             <label className="label">
                                 <span className="label-text">Email</span>
                             </label>
-                            <input type="email" placeholder="Your Email ID" className="input input-bordered" {...register('email')} />
+                            <input type="email" placeholder="Your Email ID" className="input input-bordered" {...register('email', { required: true })} />
+                            {
+                                errors.email?.type === 'required' && <span className='text-red-600'>Required</span>
+                            }
                         </div>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Password</span>
                             </label>
-                            <input type="password" placeholder="Your Password (Must have at least one capital and special character" className="input input-bordered" {...register('password')} />
+                            <input type="password" placeholder="Your Password (Must have at least one capital and special character" className="input input-bordered" {...register('password', { pattern: /[^a-zA-Z0-9\s]/g, minLength: 6 })} />
+                            {
+                                errors.password?.type === 'minLength' && <span className='text-red-600'>Minimum password length is 6</span>
+                            }
+                            {
+                                errors.password?.type === 'pattern' && <span className='text-red-600'>Must have at least one special character</span>
+                            }
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -173,7 +142,10 @@ function RegistrationPage() {
                             <label className="label">
                                 <span className="label-text">Photo URL</span>
                             </label>
-                            <input type="text" placeholder="Your photo URL" className="input input-bordered" {...register('photolink')} />
+                            <input type="text" placeholder="Your photo URL" className="input input-bordered" {...register('photolink', { pattern: /^(https?|ftp):\/\/[^\s\/$.?#].[^\s]*$/ })} />
+                            {
+                                errors.photolink?.type === 'pattern' && <span className='text-red-600'>Please input valid url</span>
+                            }
                         </div>
                         <div className='flex flex-col justify-center items-center p-4'>
                             <h1 className='text-white font-semibold pb-4'>Sign in by Google instead?</h1>

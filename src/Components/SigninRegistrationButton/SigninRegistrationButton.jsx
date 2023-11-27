@@ -1,15 +1,22 @@
 import { Button } from '@mui/material'
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
+import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider'
 
 function SigninRegistrationButton() {
+    const { user } = useContext(AuthenticationContext);
     return (
         <div className='p-2'>
-            <NavLink to='/signin'>
-                <span>
-                    <Button variant='contained'>Sign In</Button>
-                </span>
-            </NavLink>
+            {
+                user ?
+                    <Button variant='contained'>{user?.email}</Button>
+                    : <NavLink to='/signin'>
+                        <span>
+                            <Button variant='contained'>Sign In</Button>
+                        </span>
+                    </NavLink>
+            }
+
         </div>
     )
 }
