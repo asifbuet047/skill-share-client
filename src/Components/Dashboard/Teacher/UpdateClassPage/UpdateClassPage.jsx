@@ -69,14 +69,14 @@ function UpdateClassPage() {
                                     <label className="label">
                                         <span className="label-text">Teacher name</span>
                                     </label>
-                                    <input type="text" value={data?.data?.name} className="input input-bordered" {...register('name')} />
+                                    <input type="text" value={data?.data?.name} className="input input-bordered" {...register('name')} disabled/>
 
                                 </div>
                                 <div className="form-control">
                                     <label className="label">
                                         <span className="label-text">Email</span>
                                     </label>
-                                    <input type="email" value={data?.data?.email} className="input input-bordered" {...register('email')} />
+                                    <input type="email" value={data?.data?.email} className="input input-bordered" {...register('email')}disabled />
 
                                 </div>
                                 <div className="form-control">

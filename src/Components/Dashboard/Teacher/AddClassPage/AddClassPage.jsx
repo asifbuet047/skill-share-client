@@ -19,7 +19,6 @@ function AddClassPage() {
   const [openModal, setOpenModal] = useState(false);
   const mutation = useMutation({
     mutationFn: async (data) => {
-      console.log(data);
       if (data) {
         return instance.post('/addclass', data);
       }
@@ -55,14 +54,14 @@ function AddClassPage() {
                 <label className="label">
                   <span className="label-text">Teacher name</span>
                 </label>
-                <input type="text" value={user.displayName} className="input input-bordered" {...register('name')} />
+                <input type="text" value={user.displayName} className="input input-bordered" {...register('name')} disabled/>
 
               </div>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
                 </label>
-                <input type="email" value={user.email} className="input input-bordered" {...register('email')} />
+                <input type="email" value={user.email} className="input input-bordered" {...register('email')} disabled/>
 
               </div>
               <div className="form-control">

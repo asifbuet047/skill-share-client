@@ -79,11 +79,18 @@ function MyClassesPage() {
               <Typography variant="h5">Status: {value.status}</Typography>
             </CardContent>
             <CardActions className="flex flex-row justify-center items-center">
-              <Button size="small" variant="contained" onClick={() => {
+              <Button className="w-1/3" variant="contained" onClick={() => {
                 navigate(`/dashboard/updateclass/${value._id}`)
               }}>Update</Button>
-              <Button size="small" variant="contained" onClick={() => { setClassId(value._id); setOpenModal(true) }}>Delete</Button>
-              <Button size="small" variant="contained">See Details</Button>
+              <Button className="w-1/3" variant="contained" onClick={() => { setClassId(value._id); setOpenModal(true) }}>Delete</Button>
+              {
+                value.status === 'pending' &&
+                <Button className="w-1/3" variant="contained" disabled>See Details</Button>
+              }
+              {
+                value.status === 'approved' &&
+                <Button className="w-1/3" variant="contained">See Details</Button>
+              }
             </CardActions>
           </Card>)
         }
