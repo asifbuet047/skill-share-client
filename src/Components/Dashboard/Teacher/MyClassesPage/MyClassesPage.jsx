@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useLoggedinUser from "../../../../Hooks/useLoggedinUser";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 import ClockLoading from "../../../DataLoadingComponents/ClockLoading";
@@ -24,7 +24,7 @@ function MyClassesPage() {
   const [openModal, setOpenModal] = useState(false);
   const [classId, setClassId] = useState(null);
 
-
+  const queryClient = useQueryClient();
   const { data, isFetching, isSuccess, error } = useQuery({
     queryKey: ['myclass', user?.email],
     queryFn: async () => {
@@ -37,7 +37,9 @@ function MyClassesPage() {
       console.log(data);
       return instance.delete(`/deleteclass/${data}`);
     },
-    
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myclass'] });
+    }
   });
 
   if (isFetching) {
