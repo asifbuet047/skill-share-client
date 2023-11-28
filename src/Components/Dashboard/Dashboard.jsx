@@ -71,7 +71,7 @@ function Dashboard() {
                                     </div>
                                 }
                                 {
-                                    data?.data?.data?.role === "Student" &&
+                                    data?.data?.data?.role === "student" &&
                                     <div className='w-full h-screen rounded-lg flex flex-col bg-base-200'>
                                         <NavLink to={'/dashboard/enroll'}>
                                             <Button startIcon={<GiTeacher />}>My Enroll Classes</Button>

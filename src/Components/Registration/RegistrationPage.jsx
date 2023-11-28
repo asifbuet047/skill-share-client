@@ -30,6 +30,7 @@ function RegistrationPage() {
             return instance.post('/api/v1/token', data);
         },
         onSuccess: (data) => {
+            console.log(data.data);
             toast.success(`Successfully Logged In. Welcome`, {
                 position: 'bottom-right',
                 autoClose: 2000
@@ -63,10 +64,49 @@ function RegistrationPage() {
         }
     });
 
+    const newUserRegistrationMutation = useMutation({
+        mutationKey: ['newUserRegistration'],
+        mutationFn: (data) => {
+            return createNewUser(data.email, data.password);
+        },
+        onSuccess: (data) => {
+            const email = data.user.email;
+            const uid = data.user.uid;
+            const fortoken = { email, uid };
+            const name = getValues('name');
+            const photolink = getValues('photolink');
+            const forName = { name, photolink };
+            tokenMutation.mutate(fortoken);
+            updateNamePhotoMutation.mutate(forName);
+        }
+    });
+
     const updateNamePhotoMutation = useMutation({
         mutationKey: ['updateUser'],
         mutationFn: (data) => {
+            console.log(data);
+            return changeExitingUsersNameAndPhotoURL(data.name, data.photolink);
+        },
+        onSuccess: (data) => {
+            console.log(data);
+            addNewUserMutation.mutate();
+        },
+        onError: (error) => {
+            console.log(error);
+        }
+    });
 
+    const addNewUserMutation = useMutation({
+        mutationKey: ['addnewuser'],
+        mutationFn: () => {
+            const email = getValues('email');
+            const name = getValues('name');
+            const photolink = getValues('photolink');
+            const user = { name, role: 'student', photo_url: photolink, email };
+            return instance.post('/user', user);
+        },
+        onSuccess: (data) => {
+            console.log(data);
         }
     });
 
@@ -75,69 +115,14 @@ function RegistrationPage() {
         googleSigninMutation.mutate();
     }
 
+
     const handleRegistrationEvent = (event) => {
         const password = getValues('password');
-        const mail = getValues('email');
+        const email = getValues('email');
         const name = getValues('name');
         const photolink = getValues('photolink');
-
-        createNewUser(mail, password)
-            .then((response) => {
-                const uid = response.user.uid;
-                instance.post('/api/v1/token', { mail, uid })
-                    .then((response) => {
-                        console.log(response);
-                        localStorage.setItem('ACCESS_TOKEN', response.ACCESS_TOKEN)
-                        changeExitingUsersNameAndPhotoURL(name, photolink)
-                            .then((response) => {
-                                const user = {
-                                    name: name,
-                                    role: 'student',
-                                    photo_url: photolink,
-                                    email: mail
-                                };
-                                instance.post('/user', user)
-                                    .then((response) => {
-                                        console.log(response);
-                                        toast.success(`New user is successfully created. Welcome`, {
-                                            position: 'bottom-right',
-                                            autoClose: 2000,
-                                        });
-                                    }).catch((error) => {
-                                        console.log(error);
-                                    })
-
-                            }).catch((error) => {
-                                console.log(error);
-                            });
-                    }).catch((error) => {
-                        signOutUser();
-                        console.log(error);
-                        toast.error(`Not valid User try later ${error}`, {
-                            position: 'bottom-right',
-                            autoClose: 3000,
-                        });
-                    })
-
-                if (location.state === null) {
-                    navigate('/');
-                } else {
-                    console.log(location.state);
-                    navigate(`${location.state}`);
-                }
-            })
-            .catch((error) => {
-                toast.error(error.message, {
-                    position: 'bottom-right',
-                    autoClose: '2000',
-                    hideProgressBar: false,
-                    newestOnTop: true,
-                    closeOnClick: true,
-                    draggable: false,
-                    pauseOnHover: false,
-                    theme: 'light'
-                });
-            })
+        const user = { email, password };
+        newUserRegistrationMutation.mutate(user);
     };
 
     return (
@@ -231,19 +216,20 @@ function RegistrationPage() {
                             }
                         </div>
                         {
-                            tokenMutation.isIdle &&
+                            newUserRegistrationMutation.isIdle &&
                             <div className="form-control mt-6">
-                                <button className="btn btn-primary">REGISTER</button>
+                                <button className="btn btn-primary" onClick={handleRegistrationEvent}>REGISTER</button>
                             </div>
                         }
                         {
-                            tokenMutation.isPending &&
-                            <div>
-                                <button className="btn btn-primary"><CircularProgress /></button>
+                            newUserRegistrationMutation.isPending &&
+                            <div className='flex flex-row justify-center items-center'>
+                                <CircularProgress />
                             </div>
                         }
+
                         {
-                            tokenMutation.isSuccess &&
+                            newUserRegistrationMutation.isSuccess &&
                             <div className='flex flex-row justify-center items-center'>
                                 <button className="btn btn-primary" disabled>Registration Complete</button>
                             </div>
