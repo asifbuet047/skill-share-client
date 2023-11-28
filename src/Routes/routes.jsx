@@ -10,6 +10,7 @@ import TeachersClassRequestPage from "../Components/Dashboard/Admin/TeachersClas
 import MyClassesPage from "../Components/Dashboard/Teacher/MyClassesPage/MyClassesPage"
 import UpdateClassPage from "../Components/Dashboard/Teacher/UpdateClassPage/UpdateClassPage";
 import UserProfilePage from "../Components/Dashboard/UserProfilePage/UserProfilePage"
+import BecomeTeacherRequest from "../Components/BecomeTeacherRequest/BecomeTeacherRequest";
 
 export const getRoutes = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ export const getRoutes = createBrowserRouter([
             {
                 path: 'registration',
                 element: <RegistrationPage></RegistrationPage>
+            },
+            {
+                path: 'becomeateacher',
+                element: <BecomeTeacherRequest></BecomeTeacherRequest>
             }
 
         ]

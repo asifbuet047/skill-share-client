@@ -26,19 +26,19 @@ function Dashboard() {
                     <div className='flex flex-col'>
                         <div className='w-full h-10 flex flex-row justify-center items-center border-2 rounded-lg border-green-500'>
                             {
-                                data?.data?.data?.role === "Admin" && <span>Admin Dashboard</span>
+                                data?.data?.data?.role === "admin" && <span>Admin Dashboard</span>
                             }
                             {
-                                data?.data?.data?.role === "Teacher" && <span>Teacher Dashboard</span>
+                                data?.data?.data?.role === "teacher" && <span>Teacher Dashboard</span>
                             }
                             {
-                                data?.data?.data?.role === "Student" && <span>Student Dashboard</span>
+                                data?.data?.data?.role === "student" && <span>Student Dashboard</span>
                             }
                         </div>
                         <div className='flex flex-row w-full h-full'>
                             <div className='hidden md:block w-1/4 border-2 rounded-lg border-green-500'>
                                 {
-                                    data?.data?.data?.role === "Admin" &&
+                                    data?.data?.data?.role === "admin" &&
 
                                     <div className='w-full h-screen rounded-lg flex flex-col bg-base-200'>
                                         <NavLink to={'/dashboard/request'}>
@@ -56,7 +56,7 @@ function Dashboard() {
                                     </div>
                                 }
                                 {
-                                    data?.data?.data?.role === "Teacher" &&
+                                    data?.data?.data?.role === "teacher" &&
                                     <div className='w-full h-screen rounded-lg flex flex-col bg-base-200'>
                                         <NavLink to={'/dashboard/addclass'}>
                                             <Button startIcon={<GiTeacher />}>Add Class</Button>

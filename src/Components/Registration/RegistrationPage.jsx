@@ -169,24 +169,7 @@ function RegistrationPage() {
                                 errors.photolink?.type === 'pattern' && <span className='text-red-600'>Please input valid url</span>
                             }
                         </div>
-                        {/* <div>
-                            <Box sx={{ minWidth: 120, marginTop: 3 }}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-helper-label">Role</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-helper-label"
-                                        value={role}
-                                        label="Roles"
-                                        onChange={handleRoleChange}
-
-                                    >
-                                        <MenuItem value={'Teacher'}>Teacher</MenuItem>
-                                        <MenuItem value={'Student'}>Student</MenuItem>
-
-                                    </Select>
-                                </FormControl>
-                            </Box>
-                        </div> */}
+                        
                         <div className='flex flex-col justify-center items-center p-4'>
                             <h1 className='text-white font-semibold pb-4'>Sign in by Google instead?</h1>
                             {
