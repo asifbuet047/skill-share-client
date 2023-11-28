@@ -5,13 +5,11 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function useGetCurrentUser() {
     const { user } = useContext(AuthenticationContext);
-    const queryClient = useQueryClient();
     const data = useQuery({
-        queryKey: ['users', user],
-        queryFn: async () => {
-            const axiosSecureInstance = useAxiosSecure();
-            const response = await axiosSecureInstance.get(`/user?id=${user?.email}`);
-            return response;
+        queryKey: ['users'],
+        queryFn: () => {
+            const instance = useAxiosSecure();
+            return instance.get(`/user?id=${user?.email}`);
         }
     });
 
