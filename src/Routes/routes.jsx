@@ -7,6 +7,8 @@ import Dashboard from "../Components/Dashboard/Dashboard";
 import AddClassPage from "../Components/Dashboard/Teacher/AddClassPage/AddClassPage"
 import EnrollClassesPage from "../Components/Dashboard/Student/EnrollClassesPage/EnrollClassesPage"
 import TeachersClassRequestPage from "../Components/Dashboard/Admin/TeachersClassRequestPage/TeachersClassRequestPage";
+import MyClassesPage from "../Components/Dashboard/Teacher/MyClassesPage/MyClassesPage"
+import UpdateClassPage from "../Components/Dashboard/Teacher/UpdateClassPage/UpdateClassPage";
 
 export const getRoutes = createBrowserRouter([
     {
@@ -43,6 +45,14 @@ export const getRoutes = createBrowserRouter([
             {
                 path: 'enroll',
                 element: <EnrollClassesPage></EnrollClassesPage>
+            },
+            {
+                path: 'myclass',
+                element: <MyClassesPage></MyClassesPage>
+            },
+            {
+                path: 'updateclass/:id',
+                element: <UpdateClassPage></UpdateClassPage>
             }
         ]
     }

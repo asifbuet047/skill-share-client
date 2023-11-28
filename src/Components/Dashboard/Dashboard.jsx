@@ -64,7 +64,7 @@ function Dashboard() {
                                             <NavLink to={'/dashboard/addclass'}>
                                                 <Button startIcon={<GiTeacher />}>Add Class</Button>
                                             </NavLink>
-                                            <NavLink>
+                                            <NavLink to={'/dashboard/myclass'}>
                                                 <Button startIcon={<PeopleIcon />}>My Class</Button>
                                             </NavLink>
                                             <NavLink>

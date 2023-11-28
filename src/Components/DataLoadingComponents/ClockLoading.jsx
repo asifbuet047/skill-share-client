@@ -4,7 +4,7 @@ import { ClockLoader } from 'react-spinners'
 function ClockLoading() {
     return (
         <div className='w-full'>
-            <ClockLoader></ClockLoader>
+            <ClockLoader size={'3em'}></ClockLoader>
         </div>
     )
 }

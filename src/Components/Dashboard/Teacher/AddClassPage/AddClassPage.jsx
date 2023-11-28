@@ -110,18 +110,18 @@ function AddClassPage() {
               mutation.isPending &&
               <div>
                 <CircularProgress />
-                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                <h1 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                   Class is adding into database...
-                </h3>
+                </h1>
               </div>
             }
             {
               mutation.isSuccess &&
               <div>
                 <CheckIcon />
-                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                <h1 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                   Class is sucessfully added. Thanks
-                </h3>
+                </h1>
                 <Button variant="contained" onClick={() => setOpenModal(false)}>Ok</Button>
               </div>
             }
@@ -129,9 +129,9 @@ function AddClassPage() {
               mutation.isIdle &&
               <div>
                 <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
-                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                <h1 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                   Are you sure you want to add this class?
-                </h3>
+                </h1>
                 <div className="flex justify-center gap-4">
                   <Button variant="outlined" onClick={() => {
                     const details = { ...getValues(), status: 'pending' };
