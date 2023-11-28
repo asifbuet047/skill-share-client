@@ -13,53 +13,66 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { useMutation } from '@tanstack/react-query';
+import { CircularProgress } from '@mui/material';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 function RegistrationPage() {
     const { createNewUser, signInWithGoogleAccount, changeExitingUsersNameAndPhotoURL, signOutUser } = useContext(AuthenticationContext);
     const navigate = useNavigate();
     const location = useLocation();
-    const [role, setRole] = useState('Student');
     const { handleSubmit, register, getValues, formState: { errors } } = useForm();
-    const axiosSecureHook = useAxiosSecure();
+    const instance = useAxiosSecure();
 
-
-    const handleRoleChange = (event) => {
-        setRole(event.target.value);
-    }
-
-    const handleGoogleSignIn = (event) => {
-        signInWithGoogleAccount()
-            .then((response) => {
-                const uid = response.user.uid;
-                const mail = response.user.email;
-                axiosSecureHook.post('/api/v1/token', { mail, uid })
-                    .then((response) => {
-                        toast.success(`Successfully Logged In. Welcome ${mail}`, {
-                            position: 'bottom-center',
-                            autoClose: 2000,
-                        });
-                        navigate('/');
-                    }).catch((error) => {
-                        signOutUser();
-                        toast.error(`Not valid User try later ${error}`, {
-                            position: 'bottom-right',
-                            autoClose: 5000,
-                        });
-                    })
-
-                if (location.state === null) {
-                    navigate('/');
-                } else {
-                    navigate(`${location.state}`);
-                }
-            })
-            .catch((error) => {
-                navigate('/');
-                toast.error(`Something wrong ${error}`, {
-                    position: 'bottom-right',
-                    autoClose: 5000,
-                });
+    const tokenMutation = useMutation({
+        mutationKey: ['token'],
+        mutationFn: (data) => {
+            return instance.post('/api/v1/token', data);
+        },
+        onSuccess: (data) => {
+            toast.success(`Successfully Logged In. Welcome`, {
+                position: 'bottom-right',
+                autoClose: 2000
             });
+            navigate('/dashboard');
+        },
+        onError: (error) => {
+            toast.error(`${error}`, {
+                position: 'bottom-center',
+                autoClose: 5000
+            });
+        }
+    });
+
+    const googleSigninMutation = useMutation({
+        mutationKey: ['googleSignin'],
+        mutationFn: () => {
+            return signInWithGoogleAccount();
+        },
+        onSuccess: (data) => {
+            const email = data.user.email;
+            const uid = data.user.uid;
+            const fortoken = { email, uid };
+            tokenMutation.mutate(fortoken);
+        },
+        onError: (error) => {
+            toast.error(`${error}`, {
+                position: 'bottom-center',
+                autoClose: 5000
+            });
+        }
+    });
+
+    const updateNamePhotoMutation = useMutation({
+        mutationKey: ['updateUser'],
+        mutationFn: (data) => {
+
+        }
+    });
+
+
+    const handleGoogleSignInEvent = (event) => {
+        googleSigninMutation.mutate();
     }
 
     const handleRegistrationEvent = (event) => {
@@ -71,7 +84,7 @@ function RegistrationPage() {
         createNewUser(mail, password)
             .then((response) => {
                 const uid = response.user.uid;
-                axiosSecureHook.post('/api/v1/token', { mail, uid })
+                instance.post('/api/v1/token', { mail, uid })
                     .then((response) => {
                         console.log(response);
                         localStorage.setItem('ACCESS_TOKEN', response.ACCESS_TOKEN)
@@ -79,11 +92,11 @@ function RegistrationPage() {
                             .then((response) => {
                                 const user = {
                                     name: name,
-                                    role: role,
+                                    role: 'student',
                                     photo_url: photolink,
                                     email: mail
                                 };
-                                axiosSecureHook.post('/user', user)
+                                instance.post('/user', user)
                                     .then((response) => {
                                         console.log(response);
                                         toast.success(`New user is successfully created. Welcome`, {
@@ -171,7 +184,7 @@ function RegistrationPage() {
                                 errors.photolink?.type === 'pattern' && <span className='text-red-600'>Please input valid url</span>
                             }
                         </div>
-                        <div>
+                        {/* <div>
                             <Box sx={{ minWidth: 120, marginTop: 3 }}>
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-helper-label">Role</InputLabel>
@@ -188,14 +201,54 @@ function RegistrationPage() {
                                     </Select>
                                 </FormControl>
                             </Box>
-                        </div>
+                        </div> */}
                         <div className='flex flex-col justify-center items-center p-4'>
                             <h1 className='text-white font-semibold pb-4'>Sign in by Google instead?</h1>
-                            <FcGoogle size={'64'} onClick={handleGoogleSignIn}></FcGoogle>
+                            {
+                                googleSigninMutation.isIdle &&
+                                <div>
+                                    <FcGoogle size={'64'} onClick={handleGoogleSignInEvent}></FcGoogle>
+                                </div>
+                            }
+                            {
+                                googleSigninMutation.isPending &&
+                                <div>
+                                    <CircularProgress />
+                                </div>
+                            }
+                            {
+                                googleSigninMutation.isSuccess &&
+                                <div>
+                                    <FcGoogle size={'64'} onClick={handleGoogleSignInEvent}></FcGoogle>
+                                </div>
+                            }
+                            {
+                                googleSigninMutation.isError &&
+                                <div>
+                                    <ErrorOutlineIcon />
+                                    <h1>Something went wrong Please try later</h1>
+                                </div>
+                            }
                         </div>
-                        <div className="form-control mt-6">
-                            <button className="btn btn-primary">REGISTER</button>
-                        </div>
+                        {
+                            tokenMutation.isIdle &&
+                            <div className="form-control mt-6">
+                                <button className="btn btn-primary">REGISTER</button>
+                            </div>
+                        }
+                        {
+                            tokenMutation.isPending &&
+                            <div>
+                                <button className="btn btn-primary"><CircularProgress /></button>
+                            </div>
+                        }
+                        {
+                            tokenMutation.isSuccess &&
+                            <div className='flex flex-row justify-center items-center'>
+                                <button className="btn btn-primary" disabled>Registration Complete</button>
+                            </div>
+                        }
+
                         <div className='flex flex-col justify-center items-center'>
                             <h1>Allready have account?</h1>
                             <Link to={'/signin'}><h1 className='text-green-600'>Login</h1></Link>
