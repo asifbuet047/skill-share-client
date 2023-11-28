@@ -31,8 +31,6 @@ function UpdateClassPage() {
     const mutation = useMutation({
         mutationFn: async (data) => {
             if (data) {
-                console.log(id.id);
-                console.log(data);
                 return instance.patch(`/updateclass/${id.id}`, data);
             }
         }
