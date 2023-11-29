@@ -13,7 +13,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { CircularProgress } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
@@ -51,10 +51,17 @@ function RegistrationPage() {
             return signInWithGoogleAccount();
         },
         onSuccess: (data) => {
+            console.log(data);
+            const name = data.user.displayName;
             const email = data.user.email;
             const uid = data.user.uid;
+            const photo_url = data.user.photoURL;
             const fortoken = { email, uid };
+            const user = { name, role: 'student', photo_url, email };
             tokenMutation.mutate(fortoken);
+            console.log(user);
+            addNewGoogleUserMutation.mutate(user);
+
         },
         onError: (error) => {
             toast.error(`${error}`, {
@@ -106,7 +113,23 @@ function RegistrationPage() {
             return instance.post('/user', user);
         },
         onSuccess: (data) => {
-            console.log(data);
+            toast.success(`New user registration successful`, {
+                autoClose: 2000,
+                position: 'bottom-center'
+            });
+        }
+    });
+
+    const addNewGoogleUserMutation = useMutation({
+        mutationKey: ['addnewgoogleuser'],
+        mutationFn: (data) => {
+            return instance.post('/user', data);
+        },
+        onSuccess: (data) => {
+            toast.success(`New user registration successful`, {
+                autoClose: 2000,
+                position: 'bottom-center'
+            });
         }
     });
 
@@ -169,7 +192,7 @@ function RegistrationPage() {
                                 errors.photolink?.type === 'pattern' && <span className='text-red-600'>Please input valid url</span>
                             }
                         </div>
-                        
+
                         <div className='flex flex-col justify-center items-center p-4'>
                             <h1 className='text-white font-semibold pb-4'>Sign in by Google instead?</h1>
                             {
