@@ -11,6 +11,7 @@ import { NavLink } from 'react-router-dom';
 function BecomeTeacherRequest() {
     const user = useLoggedinUser();
     const instance = useAxiosSecure();
+    const [times, setTimes] = useState(1);
     const [experience, setExperience] = useState('Beginner');
     const [category, setCategory] = useState('Web Development');
     const { handleSubmit, register, getValues, formState: { errors } } = useForm();
@@ -38,9 +39,11 @@ function BecomeTeacherRequest() {
             status: 'pending',
             title: getValues('title'),
             experience: experience,
-            category: category
+            category: category,
+            times: teachrequest.data.data?.student ? 1 : teachrequest.data.data.times + 1
         };
-        // mutate(request);
+        mutate(request);
+        console.log(teachrequest.data);
     }
 
     const handleExperienceChange = (event) => {
@@ -200,6 +203,15 @@ function BecomeTeacherRequest() {
                                                 <form className="card-body" onSubmit={handleSubmit(handleSubmitForReview)}>
                                                     <div className="form-control">
                                                         <label className="label">
+                                                            <span className="label-text">Request nos</span>
+                                                        </label>
+                                                        <div className='flex flex-row justify-center items-center'>
+                                                            <h1>{teachrequest.data.data.times}</h1>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="form-control">
+                                                        <label className="label">
                                                             <span className="label-text">Teacher name</span>
                                                         </label>
                                                         <input type="text" value={user?.displayName} className="input input-bordered" disabled />
@@ -239,7 +251,7 @@ function BecomeTeacherRequest() {
                                                                     <MenuItem value={'Experienced'}>Experienced</MenuItem>
                                                                     <MenuItem value={'SomeIdea'}>Some Idea</MenuItem>
                                                                 </Select>
-                                                               
+
                                                             </FormControl>
                                                         </Box>
                                                     </div>
@@ -253,7 +265,6 @@ function BecomeTeacherRequest() {
                                                                     labelId="Category-label"
                                                                     label="Category"
                                                                     onChange={handleCategoryChange}
-
                                                                 >
                                                                     <MenuItem value={'Web Development'}>Web Development</MenuItem>
                                                                     <MenuItem value={'Ethical Hacking'}>Ethical Hacking</MenuItem>
@@ -261,7 +272,7 @@ function BecomeTeacherRequest() {
                                                                     <MenuItem value={'Game Development'}>Game Development</MenuItem>
                                                                     <MenuItem value={'Software Development'}>Software Development</MenuItem>
                                                                 </Select>
-                                                               
+
                                                             </FormControl>
                                                         </Box>
                                                     </div>
@@ -283,7 +294,7 @@ function BecomeTeacherRequest() {
                                                             isIdle &&
                                                             <div className='flex flex-row justify-center items-center'>
                                                                 <Tooltip title="Submit for review" placement='top-end' arrow>
-                                                                    <Button className='w-full'>Request to another</Button>
+                                                                    <Button className='w-full' type='submit'>Request to another</Button>
                                                                 </Tooltip>
                                                             </div>
                                                         }
@@ -326,7 +337,7 @@ function BecomeTeacherRequest() {
 
                                                     </CardContent>
                                                     <CardActions>
-                                                        <Button className='w-full' disabled>Wait for review</Button>
+                                                        <Button className='w-full' disabled>Waiting for review</Button>
                                                     </CardActions>
                                                 </div>
                                             }

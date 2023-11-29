@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useLoggedinUser from '../../../../Hooks/useLoggedinUser'
 import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,10 +9,19 @@ function TeachersClassRequestPage() {
   const user = useLoggedinUser();
   const instance = useAxiosSecure();
   const queryClient = useQueryClient();
+  const [email, setEmail] = useState(null);
+
+
   const allRequestQuery = useQuery({
     queryKey: ['allclasses'],
     queryFn: () => {
       return instance.get('/allrequest');
+    }
+  });
+
+  const changeRoleMutation = useMutation({
+    mutationFn: (data) => {
+      return instance.patch(`/user?id=${email}`, data);
     }
   });
 
@@ -21,6 +30,8 @@ function TeachersClassRequestPage() {
       return instance.patch('/editrequest', data);
     },
     onSuccess: (data) => {
+      const updateRole = { role: 'teacher' };
+      changeRoleMutation.mutate(updateRole);
       queryClient.invalidateQueries('allclasses');
     }
   });
@@ -93,6 +104,7 @@ function TeachersClassRequestPage() {
                             row.status === 'pending' ?
                               <Button variant='contained' onClick={() => {
                                 const data = { id: row._id, status: 'approved' };
+                                setEmail(row.email);
                                 approveStatusChangeMutation.mutate(data);
                               }}>Approve</Button>
                               :
