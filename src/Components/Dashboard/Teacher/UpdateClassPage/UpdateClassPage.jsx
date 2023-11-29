@@ -69,14 +69,14 @@ function UpdateClassPage() {
                                     <label className="label">
                                         <span className="label-text">Teacher name</span>
                                     </label>
-                                    <input type="text" value={data?.data?.name} className="input input-bordered" {...register('name')} disabled/>
+                                    <input type="text" value={data?.data?.name} className="input input-bordered" {...register('name')} disabled />
 
                                 </div>
                                 <div className="form-control">
                                     <label className="label">
                                         <span className="label-text">Email</span>
                                     </label>
-                                    <input type="email" value={data?.data?.email} className="input input-bordered" {...register('email')}disabled />
+                                    <input type="email" value={data?.data?.email} className="input input-bordered" {...register('email')} disabled />
 
                                 </div>
                                 <div className="form-control">
@@ -148,7 +148,15 @@ function UpdateClassPage() {
                                     </h1>
                                     <div className="flex justify-center gap-4">
                                         <Button variant="outlined" onClick={() => {
-                                            const details = { ...getValues(), status: 'pending' };
+                                            const details = {
+                                                title: getValues('title'),
+                                                name: user.displayName,
+                                                email: user.email,
+                                                price: getValues('price'),
+                                                description: getValues('description'),
+                                                image: getValues('image'),
+                                                status: 'pending'
+                                            };
                                             mutation.mutate(details);
                                         }}>
                                             {"Yes, I'm sure"}

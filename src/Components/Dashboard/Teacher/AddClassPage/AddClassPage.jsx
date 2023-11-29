@@ -17,9 +17,11 @@ function AddClassPage() {
   const user = useLoggedinUser();
   const instance = useAxiosSecure();
   const [openModal, setOpenModal] = useState(false);
-  const mutation = useMutation({
-    mutationFn: async (data) => {
+
+  const addClassMutation = useMutation({
+    mutationFn: (data) => {
       if (data) {
+        console.log(data);
         return instance.post('/addclass', data);
       }
     }
@@ -27,7 +29,6 @@ function AddClassPage() {
   const { handleSubmit, register, getValues, formState: { errors } } = useForm();
 
   const handleAddClassEvent = (event) => {
-
     setOpenModal(true);
   }
 
@@ -54,14 +55,14 @@ function AddClassPage() {
                 <label className="label">
                   <span className="label-text">Teacher name</span>
                 </label>
-                <input type="text" value={user.displayName} className="input input-bordered" {...register('name')} disabled/>
+                <input type="text" value={user.displayName} className="input input-bordered" {...register('name')} disabled />
 
               </div>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
                 </label>
-                <input type="email" value={user.email} className="input input-bordered" {...register('email')} disabled/>
+                <input type="email" value={user.email} className="input input-bordered" {...register('email')} disabled />
 
               </div>
               <div className="form-control">
@@ -106,7 +107,7 @@ function AddClassPage() {
         <Modal.Body>
           <div className="text-center">
             {
-              mutation.isPending &&
+              addClassMutation.isPending &&
               <div>
                 <CircularProgress />
                 <h1 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
@@ -115,7 +116,7 @@ function AddClassPage() {
               </div>
             }
             {
-              mutation.isSuccess &&
+              addClassMutation.isSuccess &&
               <div>
                 <CheckIcon />
                 <h1 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
@@ -125,7 +126,7 @@ function AddClassPage() {
               </div>
             }
             {
-              mutation.isIdle &&
+              addClassMutation.isIdle &&
               <div>
                 <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
                 <h1 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
@@ -133,8 +134,16 @@ function AddClassPage() {
                 </h1>
                 <div className="flex justify-center gap-4">
                   <Button variant="outlined" onClick={() => {
-                    const details = { ...getValues(), status: 'pending' };
-                    mutation.mutate(details);
+                    const details = {
+                      title: getValues('title'),
+                      name: user.displayName,
+                      email: user.email,
+                      price: getValues('price'),
+                      description: getValues('description'),
+                      image: getValues('image'),
+                      status: 'pending'
+                    };
+                    addClassMutation.mutate(details);
                   }}>
                     {"Yes, I'm sure"}
                   </Button>
@@ -144,8 +153,6 @@ function AddClassPage() {
                 </div>
               </div>
             }
-
-
           </div>
         </Modal.Body>
       </Modal>
