@@ -1,19 +1,39 @@
 import React from 'react'
 import useLoggedinUser from '../../../../Hooks/useLoggedinUser'
 import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ClockLoading from '../../../DataLoadingComponents/ClockLoading';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 
 function TeachersClassRequestPage() {
   const user = useLoggedinUser();
   const instance = useAxiosSecure();
+  const queryClient = useQueryClient();
   const allRequestQuery = useQuery({
     queryKey: ['allclasses'],
     queryFn: () => {
       return instance.get('/allrequest');
     }
   });
+
+  const approveStatusChangeMutation = useMutation({
+    mutationFn: (data) => {
+      return instance.patch('/editrequest', data);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries('allclasses');
+    }
+  });
+
+  const rejectStatusChangeMutation = useMutation({
+    mutationFn: (data) => {
+      return instance.patch('/editrequest', data);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries('allclasses');
+    }
+  });
+
 
   if (allRequestQuery.isFetching) {
     return (
@@ -61,8 +81,54 @@ function TeachersClassRequestPage() {
                       <TableCell align="center" sx={{ border: 1 }}>{row.title}</TableCell>
                       <TableCell align="center" sx={{ border: 1 }}>{row.category}</TableCell>
                       <TableCell align="center" sx={{ border: 1 }}>{row.status}</TableCell>
-                      <TableCell align="center" sx={{ border: 1 }}><Button variant='contained'>Approve</Button></TableCell>
-                      <TableCell align="center" sx={{ border: 1 }}><Button variant='contained'>Reject</Button></TableCell>
+
+                      {
+                        approveStatusChangeMutation.isPending &&
+                        <TableCell align="center" sx={{ border: 1 }}><Button variant='contained'>Approving...</Button></TableCell>
+                      }
+                      {
+                        approveStatusChangeMutation.isIdle &&
+                        <TableCell align="center" sx={{ border: 1 }}>
+                          {
+                            row.status === 'pending' ?
+                              <Button variant='contained' onClick={() => {
+                                const data = { id: row._id, status: 'approved' };
+                                approveStatusChangeMutation.mutate(data);
+                              }}>Approve</Button>
+                              :
+                              <Button variant='contained' disabled>Approve</Button>
+                          }
+                        </TableCell>
+                      }
+                      {
+                        approveStatusChangeMutation.isSuccess &&
+                        <TableCell align="center" sx={{ border: 1 }}><Button variant='contained' disabled>Approve</Button></TableCell>
+                      }
+
+
+
+                      {
+                        rejectStatusChangeMutation.isPending &&
+                        <TableCell align="center" sx={{ border: 1 }}><Button variant='contained'>Rejecting...</Button></TableCell>
+                      }
+                      {
+                        rejectStatusChangeMutation.isIdle &&
+                        <TableCell align="center" sx={{ border: 1 }}>
+                          {
+                            row.status === 'pending' ?
+                              <Button variant='contained' onClick={() => {
+                                const data = { id: row._id, status: 'rejected' };
+                                rejectStatusChangeMutation.mutate(data);
+                              }}>Reject</Button>
+                              :
+                              <Button variant='contained' disabled>Reject</Button>
+                          }
+                        </TableCell>
+                      }
+                      {
+                        rejectStatusChangeMutation.isSuccess &&
+                        <TableCell align="center" sx={{ border: 1 }}><Button variant='contained' disabled>Reject</Button></TableCell>
+                      }
                     </TableRow>
                   ))
                 }
