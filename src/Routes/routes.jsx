@@ -11,6 +11,8 @@ import MyClassesPage from "../Components/Dashboard/Teacher/MyClassesPage/MyClass
 import UpdateClassPage from "../Components/Dashboard/Teacher/UpdateClassPage/UpdateClassPage";
 import UserProfilePage from "../Components/Dashboard/UserProfilePage/UserProfilePage"
 import BecomeTeacherRequest from "../Components/BecomeTeacherRequest/BecomeTeacherRequest";
+import AllClasses from "../Components/AllClasses/AllClasses";
+import ClassDetails from "../Components/ClassDetails/ClassDetails";
 
 export const getRoutes = createBrowserRouter([
     {
@@ -32,6 +34,14 @@ export const getRoutes = createBrowserRouter([
             {
                 path: 'becomeateacher',
                 element: <BecomeTeacherRequest></BecomeTeacherRequest>
+            },
+            {
+                path: 'allclasses',
+                element: <AllClasses></AllClasses>
+            },
+            {
+                path: 'class/:id',
+                element: <ClassDetails></ClassDetails>
             }
 
         ]
