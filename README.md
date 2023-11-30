@@ -1,8 +1,12 @@
-# React + Vite
+Project name: Skill Share 
+Theme: ANyone can be a teacher
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Main feactures:
+1. Anyone can teach anybody from anywhere
+2. One can sign in anytime and become a student
+3. One can register with Google
+4. Admin can see all useres activities
+5. Admin can make anyone admin
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Live link: https://assignment-12-skill-share.web.app/

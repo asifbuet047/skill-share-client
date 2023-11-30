@@ -20,6 +20,7 @@ import useAxios from '../../Hooks/useAxios';
 function Dashboard() {
     const user = useLoggedinUser();
     const instance = useAxiosSecure();
+    const navigate = useNavigate();
     console.log(user);
     const { data, isFetching, isSuccess } = useQuery({
         queryKey: ['role'],
@@ -33,15 +34,13 @@ function Dashboard() {
             {
                 isFetching &&
                 <div>
-                    Fetingg
+                    <ClockLoading></ClockLoading>
                 </div>
             }
             {
                 isSuccess &&
                 <div className='flex flex-col'>
-                    {
-                        console.log(data.data)
-                    }
+
                     <div className='w-full h-10 flex flex-row justify-center items-center border-2 rounded-lg border-green-500'>
                         {
                             data.data.role === "admin" && <span>Admin Dashboard</span>
@@ -62,7 +61,7 @@ function Dashboard() {
                                     <NavLink to={'/dashboard/request'}>
                                         <Button startIcon={<GiTeacher />}>Teacher Request</Button>
                                     </NavLink>
-                                    <NavLink>
+                                    <NavLink to={'/dashboard/allusers'}>
                                         <Button startIcon={<PeopleIcon />}>Users</Button>
                                     </NavLink>
                                     <NavLink to={'/dashboard/allclasses'}>

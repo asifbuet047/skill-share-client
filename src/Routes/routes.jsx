@@ -16,6 +16,7 @@ import ClassDetails from "../Components/ClassDetails/ClassDetails";
 import AllClassesPage from "../Components/Dashboard/Admin/AllClassesPage/AllClassesPage";
 import Feedback from "../Components/Feedback/Feedback";
 import PaymentPage from "../Components/PaymentPage/PaymentPage";
+import AllUsersPage from "../Components/Dashboard/Admin/AllUsersPage/AllUsersPage";
 
 export const getRoutes = createBrowserRouter([
     {
@@ -88,6 +89,10 @@ export const getRoutes = createBrowserRouter([
             {
                 path: 'feedback/:id',
                 element: <Feedback></Feedback>
+            },
+            {
+                path: 'allusers',
+                element: <AllUsersPage></AllUsersPage>
             }
         ]
     }
