@@ -30,7 +30,9 @@ function RegistrationPage() {
             return instance.post('/api/v1/token', data);
         },
         onSuccess: (data) => {
-            console.log(data.data);
+            console.log(data.data.ACCESS_TOKEN);
+            localStorage.setItem('access-token', data.data.ACCESS_TOKEN);
+            console.log(localStorage.getItem('access-token'));
             toast.success(`Successfully Logged In. Welcome`, {
                 position: 'bottom-right',
                 autoClose: 2000
@@ -59,7 +61,6 @@ function RegistrationPage() {
             const fortoken = { email, uid };
             const user = { name, role: 'student', photo_url, email };
             tokenMutation.mutate(fortoken);
-            console.log(user);
             addNewGoogleUserMutation.mutate(user);
 
         },
@@ -95,7 +96,6 @@ function RegistrationPage() {
             return changeExitingUsersNameAndPhotoURL(data.name, data.photolink);
         },
         onSuccess: (data) => {
-            console.log(data);
             addNewUserMutation.mutate();
         },
         onError: (error) => {
@@ -113,6 +113,7 @@ function RegistrationPage() {
             return instance.post('/user', user);
         },
         onSuccess: (data) => {
+            tokenMutation.mutate(fortoken);
             toast.success(`New user registration successful`, {
                 autoClose: 2000,
                 position: 'bottom-center'

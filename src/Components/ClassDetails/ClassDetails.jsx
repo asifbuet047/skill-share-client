@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import ClockLoading from '../DataLoadingComponents/ClockLoading';
 import { Box, Button } from '@mui/material';
@@ -8,6 +8,8 @@ import { Box, Button } from '@mui/material';
 function ClassDetails() {
     const id = useParams();
     const instance = useAxiosSecure();
+    const navigate = useNavigate();
+
     const { data, isFetching, isSuccess, error } = useQuery({
         queryKey: ['class'],
         queryFn: () => {
@@ -77,7 +79,9 @@ function ClassDetails() {
                     <img src={data.data.image} className='max-w-full'></img>
                 </div>
                 <div className="form-control mt-6">
-                    <Button variant="contained">Pay</Button>
+                    <Button variant="contained" onClick={() => {
+                        navigate(`/payment/${id.id}`);
+                    }}>Pay</Button>
                 </div>
 
             </div>

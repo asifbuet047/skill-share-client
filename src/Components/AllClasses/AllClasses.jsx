@@ -68,7 +68,7 @@ function AllClasses() {
 
                                 <CardActions className="flex flex-row justify-center items-center">
                                     <NavLink to={`/class/${value._id}`}>
-                                        <Button className="w-1/3" variant="contained">Enroll</Button>
+                                        <Button className="w-full" variant="contained">Enroll</Button>
                                     </NavLink>
                                 </CardActions>
                             </Card>

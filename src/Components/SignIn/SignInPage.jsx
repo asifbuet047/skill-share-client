@@ -8,12 +8,13 @@ import { useForm } from 'react-hook-form';
 import useSignInWithMailPassHook from '../../Hooks/useAuth';
 import { Button } from '@mui/material';
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
+import useAuth from '../../Hooks/useAuth';
 
 
 function SignInPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signInUser: signin } = useSignInWithMailPassHook();
+  const { signInUser: signin, signOutUser } = useContext(AuthenticationContext);
   const { register, handleSubmit, formState: { errors }, getValues } = useForm();
   const axiosSecureInstance = useAxiosSecure();
 
@@ -28,7 +29,8 @@ function SignInPage() {
         console.log(user);
         axiosSecureInstance.post('/api/v1/token', { mail, uid })
           .then((response) => {
-            console.log(response);
+            localStorage.setItem('access-token', response.data.ACCESS_TOKEN);
+            console.log(localStorage.getItem('access-token'));
             toast.success(`Successfully Logged In. Welcome`, {
               position: 'bottom-center',
               autoClose: 2000,

@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { AuthenticationContext } from '../Contexts/AuthenticationContextProvider'
 
-function useSignInWithMailPassHook() {
-    const { signInUser } = useContext(AuthenticationContext);
-    return {signInUser};
+function useAuth() {
+    const { signOutUser } = useContext(AuthenticationContext);
+    return { signOutUser };
 }
 
-export default useSignInWithMailPassHook
+export default useAuth

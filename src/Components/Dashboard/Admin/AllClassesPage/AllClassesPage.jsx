@@ -3,10 +3,12 @@ import { Button, CircularProgress, Paper, Table, TableBody, TableCell, TableCont
 import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ClockLoading from '../../../DataLoadingComponents/ClockLoading';
+import { useNavigate } from 'react-router-dom';
 
 
 function AllClassesPage() {
   const instance = useAxiosSecure();
+  const navigate = useNavigate();
   const [email, setEmail] = useState(null);
 
   const queryClient = useQueryClient();
@@ -136,7 +138,10 @@ function AllClassesPage() {
                       }
                       {
                         row.status === 'approved' ?
-                          <TableCell align="center" sx={{ border: 1 }}><Button variant='contained'>See progress</Button></TableCell>
+                          <TableCell align="center" sx={{ border: 1 }}><Button variant='contained' onClick={() => {
+                            console.log(row._id);
+                            navigate(`/dashboard/feedback/${row._id}`);
+                          }}>See progress</Button></TableCell>
                           :
                           <TableCell align="center" sx={{ border: 1 }}><Button variant='contained' disabled>See progress</Button></TableCell>
                       }

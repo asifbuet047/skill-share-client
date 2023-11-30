@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function useGetCurrentUser() {
     const { user } = useContext(AuthenticationContext);
+    
     const data = useQuery({
         queryKey: ['users'],
         queryFn: () => {
