@@ -26,7 +26,7 @@ function CollaboratorsBannerSection() {
 
   if (isSuccess) {
     return (
-      <div className='flex flex-row w-full justify-center border-4 border-green-500 rounded-lg p-5'>
+      <div className='flex flex-row w-full justify-center border-4 border-green-500 rounded-lg p-5 mt-2 mb-2'>
         {
           data?.data?.map((value, index) =>
             <div className='flex flex-col ml-4 mr-4 justify-center items-center'>
