@@ -3,20 +3,26 @@ import { Button } from '@mui/material';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useEffect, useState } from 'react'
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import useLoggedinUser from '../../Hooks/useLoggedinUser';
 import ClockLoading from '../DataLoadingComponents/ClockLoading';
 import { toast } from 'react-toastify';
 
 function CheckoutForm({ data, price }) {
-    console.log(price);
-    console.log(data);
     const user = useLoggedinUser();
     const stripe = useStripe();
     const element = useElements();
     const instance = useAxiosSecure();
     const [transactionId, setTransactionId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
+    const [currentClass, setCurrentClass] = useState(null);
+
+    const queryClass = useQuery({
+        queryKey: ['queryclass'],
+        queryFn: () => {
+            return instance.get(`/classDetails/${data.id}`);
+        }
+    });
 
 
     useEffect(() => {
@@ -29,6 +35,15 @@ function CheckoutForm({ data, price }) {
     const { isPending, isIdle, isSuccess, mutate } = useMutation({
         mutationFn: (data) => {
             return instance.post('/payment', data);
+        },
+        onSuccess: (data) => {
+            instance.patch('/editclassenroll', { id: queryClass.data.data._id, enroll: queryClass.data.data.enroll + 1 })
+                .then((res) => {
+                    toast.success('Successfully updated the database', {
+                        position: 'bottom-center',
+                        autoClose: 2000
+                    });
+                });
         }
     });
 
@@ -72,8 +87,11 @@ function CheckoutForm({ data, price }) {
                     email: user.email,
                     price: price,
                     transactionId: paymentIntent.id,
-                    classId: data.id,
+                    class_id: data.id,
                     date: new Date(),
+                    class_name: queryClass.data.data.name,
+                    class_title: queryClass.data.data.title,
+                    class_image: queryClass.data.data.image
                 }
                 mutate(payment);
             }
