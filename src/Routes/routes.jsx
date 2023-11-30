@@ -45,7 +45,7 @@ export const getRoutes = createBrowserRouter([
             },
             {
                 path: 'class/:id',
-                element: <ClassDetails></ClassDetails>
+                element: <PrivateRoute><ClassDetails></ClassDetails></PrivateRoute>
             },
             {
                 path: 'payment/:id',
@@ -64,19 +64,19 @@ export const getRoutes = createBrowserRouter([
             },
             {
                 path: 'addclass',
-                element: <AddClassPage></AddClassPage>
+                element: <PrivateRoute><AddClassPage></AddClassPage></PrivateRoute>
             },
             {
                 path: 'enroll',
-                element: <EnrollClassesPage></EnrollClassesPage>
+                element: <PrivateRoute><EnrollClassesPage></EnrollClassesPage></PrivateRoute>
             },
             {
                 path: 'myclass',
-                element: <MyClassesPage></MyClassesPage>
+                element: <PrivateRoute><MyClassesPage></MyClassesPage></PrivateRoute>
             },
             {
                 path: 'updateclass/:id',
-                element: <UpdateClassPage></UpdateClassPage>
+                element: <PrivateRoute><UpdateClassPage></UpdateClassPage></PrivateRoute>
             },
             {
                 path: 'profile/',
@@ -84,7 +84,7 @@ export const getRoutes = createBrowserRouter([
             },
             {
                 path: 'allclasses',
-                element: <AllClassesPage></AllClassesPage>
+                element: <PrivateRoute><AllClassesPage></AllClassesPage></PrivateRoute>
             },
             {
                 path: 'feedback/:id',
