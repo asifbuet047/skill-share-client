@@ -134,8 +134,12 @@ function AllClassesPage() {
                         rejectStatusOfClassMutation.isSuccess &&
                         <TableCell align="center" sx={{ border: 1 }}><Button variant='contained' disabled>Reject</Button></TableCell>
                       }
-
-                      <TableCell align="center" sx={{ border: 1 }}><Button variant='contained'>See progress</Button></TableCell>
+                      {
+                        row.status === 'approved' ?
+                          <TableCell align="center" sx={{ border: 1 }}><Button variant='contained'>See progress</Button></TableCell>
+                          :
+                          <TableCell align="center" sx={{ border: 1 }}><Button variant='contained' disabled>See progress</Button></TableCell>
+                      }
                     </TableRow>
                   ))
                 }
