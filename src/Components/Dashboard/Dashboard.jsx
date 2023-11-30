@@ -36,7 +36,7 @@ function Dashboard() {
                             }
                         </div>
                         <div className='flex flex-row w-full h-full'>
-                            <div className='hidden md:block w-1/4 border-2 rounded-lg border-green-500'>
+                            <div className='hidden md:block w-fit border-2 rounded-lg border-green-500'>
                                 {
                                     data?.data?.data?.role === "admin" &&
 
@@ -47,7 +47,7 @@ function Dashboard() {
                                         <NavLink>
                                             <Button startIcon={<PeopleIcon />}>Users</Button>
                                         </NavLink>
-                                        <NavLink>
+                                        <NavLink to={'/dashboard/allclasses'}>
                                             <Button startIcon={<SchoolIcon />}>All CLasses</Button>
                                         </NavLink>
                                         <NavLink to={'/dashboard/profile'}>
@@ -84,7 +84,7 @@ function Dashboard() {
                                     </div>
                                 }
                             </div>
-                            <div className='w-3/4 border-2 rounded-lg border-green-500'>
+                            <div className='w-fit border-2 rounded-lg border-green-500'>
                                 <Outlet></Outlet>
                             </div>
                         </div>

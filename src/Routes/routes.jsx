@@ -13,6 +13,7 @@ import UserProfilePage from "../Components/Dashboard/UserProfilePage/UserProfile
 import BecomeTeacherRequest from "../Components/BecomeTeacherRequest/BecomeTeacherRequest";
 import AllClasses from "../Components/AllClasses/AllClasses";
 import ClassDetails from "../Components/ClassDetails/ClassDetails";
+import AllClassesPage from "../Components/Dashboard/Admin/AllClassesPage/AllClassesPage";
 
 export const getRoutes = createBrowserRouter([
     {
@@ -73,6 +74,10 @@ export const getRoutes = createBrowserRouter([
             {
                 path: 'profile/',
                 element: <UserProfilePage></UserProfilePage>
+            },
+            {
+                path: 'allclasses',
+                element: <AllClassesPage></AllClassesPage>
             }
         ]
     }

@@ -155,7 +155,8 @@ function UpdateClassPage() {
                                                 price: getValues('price'),
                                                 description: getValues('description'),
                                                 image: getValues('image'),
-                                                status: 'pending'
+                                                status: 'pending',
+                                                enrol: 0
                                             };
                                             mutation.mutate(details);
                                         }}>

@@ -141,7 +141,8 @@ function AddClassPage() {
                       price: getValues('price'),
                       description: getValues('description'),
                       image: getValues('image'),
-                      status: 'pending'
+                      status: 'pending',
+                      enroll: 0
                     };
                     addClassMutation.mutate(details);
                   }}>

@@ -141,6 +141,9 @@ function TeachersClassRequestPage() {
                         rejectStatusChangeMutation.isSuccess &&
                         <TableCell align="center" sx={{ border: 1 }}><Button variant='contained' disabled>Reject</Button></TableCell>
                       }
+
+                      <TableCell align="center" sx={{ border: 1 }}><Button variant='contained' disabled>See progress</Button></TableCell>
+
                     </TableRow>
                   ))
                 }
@@ -160,9 +163,6 @@ function TeachersClassRequestPage() {
     );
   }
 
-  return (
-    <div>TeachersClassRequestPage</div>
-  )
 }
 
 export default TeachersClassRequestPage
