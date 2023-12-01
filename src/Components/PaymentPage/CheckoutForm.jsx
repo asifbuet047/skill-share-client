@@ -102,24 +102,27 @@ function CheckoutForm({ data, price }) {
         <div className='border-2 border-green-600 rounded-lg'>
             {
                 isIdle &&
-                <form onSubmit={handleSubmit}>
-                    <CardElement className=''
+                <form onSubmit={handleSubmit} className='p-5'>
+                    <CardElement
                         options={{
                             style: {
                                 base: {
-                                    fontSize: '16px',
-                                    color: '#424770',
+                                    fontSize: '32px',
+                                    color: '#black',
                                     '::placeholder': {
-                                        color: '#aab7c4',
+                                        color: 'black',
                                     },
                                 },
                                 invalid: {
-                                    color: '#9e2146',
+                                    color: 'red',
                                 },
                             },
                         }}
                     />
-                    <Button variant='outlined' type='submit' disabled={!stripe}>Pay</Button>
+                    <div className='flex flex-col justify-center items-center'>
+                        <Button variant='contained' type='submit' disabled={!stripe}>Pay</Button>
+                    </div>
+
                 </form>
             }
             {

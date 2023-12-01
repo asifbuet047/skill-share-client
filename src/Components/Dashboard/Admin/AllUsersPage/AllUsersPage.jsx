@@ -46,8 +46,8 @@ export default function AllUsersPage() {
                                         <TableCell align="center" sx={{ border: 1 }}>{row.name}</TableCell>
                                         <TableCell align="center" sx={{ border: 1 }}>{row.email}</TableCell>
                                         <TableCell align="center" sx={{ border: 1 }}>{row.role}</TableCell>
-                                        <Avatar src={row.photo_url} alt={row.name}></Avatar>
-
+                                        <TableCell align="center" sx={{ border: 1 }}><Avatar src={row.photo_url} alt={row.name}></Avatar></TableCell>
+                                        
                                         {
                                             makeAdminMutation.isPending &&
                                             <TableCell align="center" sx={{ border: 1 }}><Button variant='contained'>Approving...</Button></TableCell>

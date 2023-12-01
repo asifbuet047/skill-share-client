@@ -6,12 +6,12 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { Button } from 'flowbite-react';
 import ClockLoading from '../DataLoadingComponents/ClockLoading';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 function BecomeTeacherRequest() {
+    const location = useLocation();
     const user = useLoggedinUser();
     const instance = useAxiosSecure();
-    const [times, setTimes] = useState(1);
     const [experience, setExperience] = useState('Beginner');
     const [category, setCategory] = useState('Web Development');
     const { handleSubmit, register, getValues, formState: { errors } } = useForm();

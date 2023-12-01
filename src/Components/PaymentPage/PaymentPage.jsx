@@ -20,8 +20,8 @@ function PaymentPage() {
     if (isSuccess) {
         return (
             <div>
-                <div>
-                    Please Pay for {data.data.price} for class
+                <div className='flex flex-row justify-center items-center'>
+                    <h1 className='text-3xl'>Please Pay for {data.data.price} for class</h1>
                 </div>
                 <Elements stripe={promiseStripe}>
                     <CheckoutForm data={id} price={data.data.price}></CheckoutForm>

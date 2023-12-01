@@ -21,7 +21,6 @@ function Dashboard() {
     const user = useLoggedinUser();
     const instance = useAxiosSecure();
     const navigate = useNavigate();
-    console.log(user);
     const { data, isFetching, isSuccess } = useQuery({
         queryKey: ['role'],
         queryFn: () => {
@@ -101,7 +100,7 @@ function Dashboard() {
                                 </div>
                             }
                         </div>
-                        <div className='w-fit border-2 rounded-lg border-green-500'>
+                        <div className='w-full border-2 rounded-lg border-green-500'>
                             <Outlet></Outlet>
                         </div>
                     </div>

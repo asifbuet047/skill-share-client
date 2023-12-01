@@ -26,7 +26,7 @@ function PopularClassesSection() {
       <div className='flex flex-row w-full justify-center border-4 border-green-500 rounded-lg p-5 mt-2 mb-2'>
         {
           data?.data?.map((value, index) =>
-            <div className='flex flex-col ml-4 mr-4 justify-center items-center'>
+            <div className='flex flex-col ml-4 mr-4 justify-center items-center' key={index}>
               <Avatar img={value.image}></Avatar>
               <h1><span className='text-center'>{value.title}</span></h1>
               <h1>Enroll: {value.enroll}</h1>

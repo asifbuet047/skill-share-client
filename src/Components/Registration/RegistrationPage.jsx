@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { isCapitalLetterPresentInPassword, isPasswordLengthEnough, isSpecialCharacterPresentInPassword } from '../../Utilities/Utilities'
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
-import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import useAxios from '../../Hooks/useAxios';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
@@ -22,7 +22,7 @@ function RegistrationPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const { handleSubmit, register, getValues, formState: { errors } } = useForm();
-    const instance = useAxiosSecure();
+    const instance = useAxios();
 
     const tokenMutation = useMutation({
         mutationKey: ['token'],
@@ -30,14 +30,7 @@ function RegistrationPage() {
             return instance.post('/api/v1/token', data);
         },
         onSuccess: (data) => {
-            console.log(data.data.ACCESS_TOKEN);
             localStorage.setItem('access-token', data.data.ACCESS_TOKEN);
-            console.log(localStorage.getItem('access-token'));
-            toast.success(`Successfully Logged In. Welcome`, {
-                position: 'bottom-right',
-                autoClose: 2000
-            });
-            navigate('/dashboard');
         },
         onError: (error) => {
             toast.error(`${error}`, {
@@ -53,7 +46,6 @@ function RegistrationPage() {
             return signInWithGoogleAccount();
         },
         onSuccess: (data) => {
-            console.log(data);
             const name = data.user.displayName;
             const email = data.user.email;
             const uid = data.user.uid;
@@ -86,24 +78,32 @@ function RegistrationPage() {
             const forName = { name, photolink };
             tokenMutation.mutate(fortoken);
             updateNamePhotoMutation.mutate(forName);
+        },
+        onError: (error) => {
+            toast.error(`${error}`, {
+                position: 'bottom-center',
+                autoClose: 5000
+            });
         }
     });
 
     const updateNamePhotoMutation = useMutation({
         mutationKey: ['updateUser'],
         mutationFn: (data) => {
-            console.log(data);
             return changeExitingUsersNameAndPhotoURL(data.name, data.photolink);
         },
         onSuccess: (data) => {
-            addNewUserMutation.mutate();
+            addNewUserIntoDbMutation.mutate();
         },
         onError: (error) => {
-            console.log(error);
+            toast.error(`${error}`, {
+                position: 'bottom-center',
+                autoClose: 5000
+            });
         }
     });
 
-    const addNewUserMutation = useMutation({
+    const addNewUserIntoDbMutation = useMutation({
         mutationKey: ['addnewuser'],
         mutationFn: () => {
             const email = getValues('email');
@@ -113,10 +113,10 @@ function RegistrationPage() {
             return instance.post('/user', user);
         },
         onSuccess: (data) => {
-            tokenMutation.mutate(fortoken);
-            toast.success(`New user registration successful`, {
+            navigate('/dashboard/profile');
+            toast.success(`New user registration successful Done`, {
                 autoClose: 2000,
-                position: 'bottom-center'
+                position: 'bottom-right'
             });
         }
     });
@@ -127,9 +127,10 @@ function RegistrationPage() {
             return instance.post('/user', data);
         },
         onSuccess: (data) => {
-            toast.success(`New user registration successful`, {
+            navigate('/dashboard/profile');
+            toast.success(`New Google user registration successful`, {
                 autoClose: 2000,
-                position: 'bottom-center'
+                position: 'bottom-right'
             });
         }
     });
@@ -195,7 +196,7 @@ function RegistrationPage() {
                         </div>
 
                         <div className='flex flex-col justify-center items-center p-4'>
-                            <h1 className='text-white font-semibold pb-4'>Sign in by Google instead?</h1>
+                            <h1 className='font-semibold pb-4'>Sign in by Google instead?</h1>
                             {
                                 googleSigninMutation.isIdle &&
                                 <div>
@@ -216,7 +217,7 @@ function RegistrationPage() {
                             }
                             {
                                 googleSigninMutation.isError &&
-                                <div>
+                                <div className='flex flex-col justify-center items-center'>
                                     <ErrorOutlineIcon />
                                     <h1>Something went wrong Please try later</h1>
                                 </div>
@@ -225,7 +226,7 @@ function RegistrationPage() {
                         {
                             newUserRegistrationMutation.isIdle &&
                             <div className="form-control mt-6">
-                                <button className="btn btn-primary" onClick={handleRegistrationEvent}>REGISTER</button>
+                                <button className="btn btn-primary" type='submit'>REGISTER</button>
                             </div>
                         }
                         {

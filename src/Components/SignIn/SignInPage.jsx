@@ -2,61 +2,72 @@ import { React, useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { Player } from '@lottiefiles/react-lottie-player'
 import { useForm } from 'react-hook-form';
 import useSignInWithMailPassHook from '../../Hooks/useAuth';
 import { Button } from '@mui/material';
 import { AuthenticationContext } from '../../Contexts/AuthenticationContextProvider';
-import useAuth from '../../Hooks/useAuth';
+import { useMutation } from '@tanstack/react-query';
+import useAxios from "../../Hooks/useAxios"
 
 
 function SignInPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signInUser: signin, signOutUser } = useContext(AuthenticationContext);
+  const { signInUser, signOutUser } = useContext(AuthenticationContext);
   const { register, handleSubmit, formState: { errors }, getValues } = useForm();
-  const axiosSecureInstance = useAxiosSecure();
+  const instance = useAxios();
+
+  const getTokenMutation = useMutation({
+    mutationKey: ['gettoken'],
+    mutationFn: (data) => {
+      return instance.post('/api/v1/token', data);
+    },
+    onSuccess: (data) => {
+      localStorage.setItem('access-token', data.data.ACCESS_TOKEN);
+      toast.success(`Successfully Logged In. Welcome`, {
+        position: 'bottom-right',
+        autoClose: 2000,
+      });
+      if (location.state === null) {
+        navigate('/dashboard/profile');
+      } else {
+        navigate(`${location.state}`);
+      }
+    },
+    onError: (error) => {
+      signOutUser();
+      toast.error(`Something wrong ${error}`, {
+        position: 'bottom-center',
+        autoClose: 5000,
+      });
+    }
+  });
+
+
+  const signInMutation = useMutation({
+    mutationKey: ['getusergoogle'],
+    mutationFn: (data) => {
+      console.log(data);
+      return signInUser(data.mail, data.password);
+    },
+    onSuccess: (data) => {
+      const mail = data.user.email;
+      const uid = data.user.uid;
+      getTokenMutation.mutate({ mail, uid });
+    },
+    onError: (error) => {
+      toast.error(`Something wrong ${error}`, {
+        position: 'bottom-center',
+        autoClose: 5000,
+      });
+    }
+  });
 
   const handleSignInEvent = () => {
     const password = getValues('password');
     const mail = getValues('email');
-
-    signin(mail, password)
-      .then((user) => {
-        const mail = user.user.email;
-        const uid = user.user.uid;
-        console.log(user);
-        axiosSecureInstance.post('/api/v1/token', { mail, uid })
-          .then((response) => {
-            localStorage.setItem('access-token', response.data.ACCESS_TOKEN);
-            console.log(localStorage.getItem('access-token'));
-            toast.success(`Successfully Logged In. Welcome`, {
-              position: 'bottom-center',
-              autoClose: 2000,
-            });
-          }).catch((error) => {
-            signOutUser();
-            console.log(error);
-            toast.error(`Something wrong ${error}`, {
-              position: 'bottom-center',
-              autoClose: 2000,
-            });
-          })
-
-        if (location.state === null) {
-          navigate('/');
-        } else {
-          navigate(`${location.state}`);
-        }
-      })
-      .catch((error) => {
-        toast.error(error, {
-          position: 'bottom-center',
-          autoClose: 5000,
-        });
-      })
-
+    signInMutation.mutate({ mail, password });
   };
 
 

@@ -17,39 +17,51 @@ import AllClassesPage from "../Components/Dashboard/Admin/AllClassesPage/AllClas
 import Feedback from "../Components/Feedback/Feedback";
 import PaymentPage from "../Components/PaymentPage/PaymentPage";
 import AllUsersPage from "../Components/Dashboard/Admin/AllUsersPage/AllUsersPage";
+import PrivateRoute from "../Routes/PrivateRoute"
+import PageNotFound from "../Components/PageNotFound/PageNotFound";
+import MyClassProgress from "../Components/Dashboard/Teacher/MyClassesPage/MyClassProgress";
+import EnrolledClassAssignment from "../Components/Dashboard/Student/EnrolledClassAssignment/EnrolledClassAssignment";
 
 export const getRoutes = createBrowserRouter([
     {
         path: '/',
         element: <App />,
+        errorElement: <PageNotFound></PageNotFound>,
         children: [
             {
                 path: '/',
-                element: <HomePage></HomePage>
+                element: <HomePage></HomePage>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'signin',
-                element: <SignInPage></SignInPage>
+                element: <SignInPage></SignInPage>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'registration',
-                element: <RegistrationPage></RegistrationPage>
+                element: <RegistrationPage></RegistrationPage>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'becomeateacher',
-                element: <BecomeTeacherRequest></BecomeTeacherRequest>
+                element: <PrivateRoute><BecomeTeacherRequest></BecomeTeacherRequest></PrivateRoute>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'allclasses',
-                element: <AllClasses></AllClasses>
+                element: <AllClasses></AllClasses>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'class/:id',
-                element: <PrivateRoute><ClassDetails></ClassDetails></PrivateRoute>
+                element: <PrivateRoute><ClassDetails></ClassDetails></PrivateRoute>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'payment/:id',
-                element: <PaymentPage></PaymentPage>
+                element: <PaymentPage></PaymentPage>,
+                errorElement: <PageNotFound></PageNotFound>,
             }
 
         ]
@@ -57,42 +69,61 @@ export const getRoutes = createBrowserRouter([
     {
         path: '/dashboard',
         element: <Dashboard></Dashboard>,
+        errorElement: <PageNotFound></PageNotFound>,
         children: [
             {
                 path: 'request',
-                element: <TeachersClassRequestPage></TeachersClassRequestPage>
+                element: <TeachersClassRequestPage></TeachersClassRequestPage>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'addclass',
-                element: <PrivateRoute><AddClassPage></AddClassPage></PrivateRoute>
+                element: <PrivateRoute><AddClassPage></AddClassPage></PrivateRoute>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'enroll',
-                element: <PrivateRoute><EnrollClassesPage></EnrollClassesPage></PrivateRoute>
+                element: <PrivateRoute><EnrollClassesPage></EnrollClassesPage></PrivateRoute>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'myclass',
-                element: <PrivateRoute><MyClassesPage></MyClassesPage></PrivateRoute>
+                element: <PrivateRoute><MyClassesPage></MyClassesPage></PrivateRoute>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'updateclass/:id',
-                element: <PrivateRoute><UpdateClassPage></UpdateClassPage></PrivateRoute>
+                element: <PrivateRoute><UpdateClassPage></UpdateClassPage></PrivateRoute>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'profile/',
-                element: <UserProfilePage></UserProfilePage>
+                element: <UserProfilePage></UserProfilePage>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'allclasses',
-                element: <PrivateRoute><AllClassesPage></AllClassesPage></PrivateRoute>
+                element: <PrivateRoute><AllClassesPage></AllClassesPage></PrivateRoute>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'feedback/:id',
-                element: <Feedback></Feedback>
+                element: <Feedback></Feedback>,
+                errorElement: <PageNotFound></PageNotFound>,
             },
             {
                 path: 'allusers',
-                element: <AllUsersPage></AllUsersPage>
+                element: <AllUsersPage></AllUsersPage>,
+                errorElement: <PageNotFound></PageNotFound>,
+            },
+            {
+                path: 'class/:id',
+                element: <MyClassProgress></MyClassProgress>,
+                errorElement: <PageNotFound></PageNotFound>
+            },
+            {
+                path: 'myenroll/:id',
+                element: <EnrolledClassAssignment></EnrolledClassAssignment>
             }
         ]
     }

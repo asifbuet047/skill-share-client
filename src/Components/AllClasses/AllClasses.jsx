@@ -43,7 +43,7 @@ function AllClasses() {
 
     if (isSuccess) {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 m-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-3 border-4 border-green-500 rounded-lg">
                 {
                     data?.data?.map(
                         (value, index) =>

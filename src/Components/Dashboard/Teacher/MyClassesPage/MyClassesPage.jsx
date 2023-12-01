@@ -27,10 +27,12 @@ function MyClassesPage() {
   const queryClient = useQueryClient();
   const { data, isFetching, isSuccess, error } = useQuery({
     queryKey: ['myclass', user?.email],
-    queryFn: async () => {
+    queryFn: () => {
       return instance.get(`/myclass?id=${user?.email}`);
     }
   });
+
+
 
   const mutation = useMutation({
     mutationFn: (data) => {
@@ -60,39 +62,58 @@ function MyClassesPage() {
 
   if (isSuccess) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 m-3">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 m-3">
         {
-          data?.data?.map((value, index) => <Card sx={{ maxWidth: 345 }} key={index}>
-            <CardMedia
-              sx={{ height: 140 }}
-              image={value.image}
-              title={value.title}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h3" component="div">
-                {value.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Description: {value.description}
-              </Typography>
-              <Typography variant="h5">Price: {value.price}</Typography>
-              <Typography variant="h5">Status: {value.status}</Typography>
-            </CardContent>
-            <CardActions className="flex flex-row justify-center items-center">
-              <Button className="w-1/3" variant="contained" onClick={() => {
-                navigate(`/dashboard/updateclass/${value._id}`)
-              }}>Update</Button>
-              <Button className="w-1/3" variant="contained" onClick={() => { setClassId(value._id); setOpenModal(true) }}>Delete</Button>
-              {
-                value.status === 'pending' &&
-                <Button className="w-1/3" variant="contained" disabled>See Details</Button>
-              }
-              {
-                value.status === 'approved' &&
-                <Button className="w-1/3" variant="contained">See Details</Button>
-              }
-            </CardActions>
-          </Card>)
+          data.data.length > 0 ?
+            data.data.map((value, index) =>
+              <Card sx={{ maxWidth: 345 }} key={index}>
+                <CardMedia
+                  sx={{ height: 140 }}
+                  image={value.image}
+                  title={value.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h3" component="div">
+                    {value.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Description: {value.description}
+                  </Typography>
+                  <Typography variant="h5">Price: {value.price}</Typography>
+                  <Typography variant="h5">Status: {value.status}</Typography>
+                </CardContent>
+                <CardActions className="flex flex-row justify-center items-center">
+                  <Button className="w-1/3" variant="contained" onClick={() => {
+                    navigate(`/dashboard/updateclass/${value._id}`)
+                  }}>Update</Button>
+                  <Button className="w-1/3" variant="contained" onClick={() => { setClassId(value._id); setOpenModal(true) }}>Delete</Button>
+                  {
+                    value.status === 'pending' &&
+                    <Button className="w-1/3" variant="contained" disabled>See Details</Button>
+                  }
+                  {
+                    value.status === 'approved' &&
+                    <Button className="w-1/3" variant="contained" onClick={() => {
+                      navigate(`/dashboard/class/${value._id}`);
+                    }}>See Details</Button>
+                  }
+                </CardActions>
+              </Card>)
+            :
+            <div>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {"You don't add any class yet. Go to Add class in dashboard"}
+                  </Typography>
+                </CardContent>
+                <CardActions className="flex flex-row justify-center items-center">
+                  <Button className="w-full" variant="contained" onClick={() => {
+                    navigate(`/dashboard/addclass/`);
+                  }}>Add Class</Button>
+                </CardActions>
+              </Card>
+            </div>
         }
 
         <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>

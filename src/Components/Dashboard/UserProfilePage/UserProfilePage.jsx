@@ -9,7 +9,6 @@ import { Avatar, Typography } from '@mui/material';
 
 function UserProfilePage() {
   const currentUser = useLoggedinUser();
-  console.log(currentUser);
   const instance = useAxiosSecure();
   const { data, isFetching, isSuccess } = useQuery({
     queryKey: ['currentuser'],
@@ -28,14 +27,13 @@ function UserProfilePage() {
       {
         isSuccess &&
         <div className='w-full h-fit flex flex-col md:flex-row bg-base-300 rounded-lg p-2'>
-          <div className='w-1/2 text-2xl'>
+          <div className='w-full text-2xl'>
             <h1>Name: {data.data.name}</h1>
             <h1>Role: {data.data.role}</h1>
             <h1>Email: {data.data.email}</h1>
             {
-              data.data?.phone && <h1>Phone: {data.data?.phone}</h1>
+              data.data?.phone && <h1>Phone: {data.data.phone}</h1>
             }
-
           </div>
           <div className='w-1/2 flex flex-row justify-center items-center'>
             <Avatar alt={data.data.name} src={data.data.photo_url} sx={{ width: 56, height: 56 }}></Avatar>
