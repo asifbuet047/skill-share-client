@@ -1,9 +1,9 @@
-#Project name: Skill Share
-##Theme: Anyone can be a teacher and anyone can learn
+# Project name: Skill Share
+## Theme: Anyone can be a teacher and anyone can learn
 
 ---
 
-###Main feactures:
+### Main feactures:
 1. Anyone can teach anybody from anywhere
 2. One can sign in anytime and become a student
 3. One can register with Google
