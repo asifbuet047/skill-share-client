@@ -1,5 +1,6 @@
-Project name: Skill Share 
-Theme: ANyone can be a teacher
+**Project name: Skill Share** 
+Theme: Anyone can be a teacher and anyone can learn
+---
 
 Main feactures:
 1. Anyone can teach anybody from anywhere
@@ -7,6 +8,7 @@ Main feactures:
 3. One can register with Google
 4. Admin can see all useres activities
 5. Admin can make anyone admin
+---
 
 
-Live link: https://assignment-12-skill-share.web.app/
+[Live link ](https://assignment-12-skill-share.web.app/)
